@@ -1,0 +1,7 @@
+Makefile
+
+build:
+	go build -o bin/
+
+run:
+	go run bin/sweden-electricity-price
