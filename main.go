@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 )
 
 // Had to "overload" the function to actually get what I wanted...
