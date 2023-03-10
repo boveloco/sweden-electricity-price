@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -37,7 +36,6 @@ func main() {
 	API_URI := getEnv("API_URI", "https://mgrey.se/espot?format=json")
 
 	data := getElectricityCost(API_URI)
-	fmt.Printf("%+v\n", &data)
 
 	// Create a new client using an InfluxDB server base URL and an authentication token
 	c := influxdb2.NewClientWithOptions("http://"+INFLUX_ADDRESS+":"+INFLUX_PORT, INFLUX_TOKEN,
@@ -89,26 +87,26 @@ func writeDatabase(cli influxdb2.Client, bucket string, d Data) {
 	writeAPI := cli.WriteAPIBlocking("bova", bucket)
 
 	// Create point using fluent style
-	p := influxdb2.NewPointWithMeasurement("stat").
+	p := influxdb2.NewPointWithMeasurement("electricity_price").
 		AddTag("region", "se1").
 		AddField("price_sek", d.Se1[0].Price_sek).
 		AddField("price_eur", d.Se1[0].Price_eur).
 		AddField("kmeans", d.Se1[0].Kmeans).
 		SetTime(time.Now())
-	q := influxdb2.NewPointWithMeasurement("stat").
+	q := influxdb2.NewPointWithMeasurement("electricity_price").
 		AddTag("region", "se2").
 		AddField("price_sek", d.Se2[0].Price_sek).
 		AddField("price_eur", d.Se2[0].Price_eur).
 		AddField("kmeans", d.Se2[0].Kmeans).
 		SetTime(time.Now())
 
-	r := influxdb2.NewPointWithMeasurement("stat").
+	r := influxdb2.NewPointWithMeasurement("electricity_price").
 		AddTag("region", "se3").
 		AddField("price_sek", d.Se3[0].Price_sek).
 		AddField("price_eur", d.Se3[0].Price_eur).
 		AddField("kmeans", d.Se3[0].Kmeans).
 		SetTime(time.Now())
-	s := influxdb2.NewPointWithMeasurement("stat").
+	s := influxdb2.NewPointWithMeasurement("electricity_price").
 		AddTag("region", "se4").
 		AddField("price_sek", d.Se4[0].Price_sek).
 		AddField("price_eur", d.Se4[0].Price_eur).
